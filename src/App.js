@@ -14,7 +14,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React do grupo 5 - Pamela 2.0, Renan 2.0, Matheus
+          Learn React do grupo 5 - Pamela 2.0, Renan 2.0, Matheus, João
         </a>
       </header>
     </div>
