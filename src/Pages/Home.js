@@ -37,7 +37,7 @@ class Home extends React.Component {
 
   handleClickCategoryBtn = async ({ target }) => {
     const productsToShow = await
-    getProductsFromCategoryAndQuery(target.innerText);
+    getProductsFromCategoryAndQuery('', target.innerText);
 
     this.setState({
       searchBtnClick: false,
