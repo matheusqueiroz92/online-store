@@ -3,6 +3,7 @@ import { Route, BrowserRouter } from 'react-router-dom';
 import './App.css';
 import Cart from './Pages/Cart';
 import Home from './Pages/Home';
+import Product from './Pages/Product';
 
 class App extends React.Component {
   // constructor() {
@@ -21,7 +22,10 @@ class App extends React.Component {
           path="/cart"
           render={ (props) => <Cart { ...props } /> }
         />
-
+        <Route
+          path="/product/:id"
+          render={ (props) => <Product { ...props } /> }
+        />
       </BrowserRouter>
     );
   }

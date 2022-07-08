@@ -5,7 +5,6 @@ import { getCategories } from '../services/api';
 class CategoryAside extends React.Component {
   constructor() {
     super();
-
     this.state = {
       categories: [],
     };
@@ -21,7 +20,7 @@ class CategoryAside extends React.Component {
   }
 
   render() {
-    const { handleClick } = this.props;
+    const { handleClickCategoryBtn } = this.props;
     const { categories } = this.state;
     return (
       <section>
@@ -33,7 +32,7 @@ class CategoryAside extends React.Component {
                 <button
                   type="button"
                   data-testid="category"
-                  onClick={ handleClick }
+                  onClick={ handleClickCategoryBtn }
                 >
                   { name }
                 </button>
@@ -45,9 +44,7 @@ class CategoryAside extends React.Component {
     );
   }
 }
-
 CategoryAside.propTypes = {
-  handleClick: PropTypes.func,
+  handleClickCategoryBtn: PropTypes.func,
 }.isRequired;
-
 export default CategoryAside;

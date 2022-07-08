@@ -1,67 +1,121 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Button from '../Components/Button';
 import CategoryAside from '../Components/CategoryAside';
-import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+
+import { getProductsFromCategoryAndQuery } from '../services/api';
 
 class Home extends React.Component {
   constructor() {
     super();
 
     this.state = {
+      searchText: '',
+      products: [],
       categoriesProducts: [],
+      searchBtnClick: false,
+      categoriesBtnClick: false,
     };
   }
 
-  handleClick = async ({ target }) => {
-    const categories = await getCategories();
-    const theSame = categories.filter((element) => element.name === target.innerText);
+  onInputChange = ({ target }) => {
+    const { name, value } = target;
+    this.setState({
+      [name]: value,
+    });
+  }
 
-    const categoryId = theSame[0].id;
-    const categoryName = theSame[0].name;
+  handleClickSearchBtn = async () => {
+    const { searchText } = this.state;
 
+    const request = await getProductsFromCategoryAndQuery('', searchText);
+    const products = request.results;
+    this.setState({
+      products,
+      searchBtnClick: true,
+      categoriesBtnClick: false,
+    });
+  }
+
+  handleClickCategoryBtn = async ({ target }) => {
     const productsToShow = await
-    getProductsFromCategoryAndQuery(categoryId, categoryName);
+    getProductsFromCategoryAndQuery('', target.innerText);
     // console.log(productsToShow.results);
 
     this.setState({
+      searchBtnClick: false,
       categoriesProducts: productsToShow.results,
+      categoriesBtnClick: true,
     });
   }
 
   render() {
-    const { categoriesProducts } = this.state;
+    const { searchText, products, categoriesProducts,
+      categoriesBtnClick, searchBtnClick } = this.state;
+
     return (
       <div>
         <header>
           <div>
             <form>
-              <input type="text" />
+              <input
+                type="text"
+                onChange={ this.onInputChange }
+                value={ searchText }
+                name="searchText"
+                data-testid="query-input"
+              />
+              <button
+                type="button"
+                data-testid="query-button"
+                onClick={ this.handleClickSearchBtn }
+              >
+                Pesquisar:
+              </button>
             </form>
           </div>
           <Button />
         </header>
         <CategoryAside
-          handleClick={ this.handleClick }
+          handleClickCategoryBtn={ this.handleClickCategoryBtn }
         />
-        <div>
+        <main>
           {
-            categoriesProducts.length === 0
+            (categoriesProducts.length === 0
+              && products.length === 0)
               ? (
                 <h4 data-testid="home-initial-message">
                   Digite algum termo de pesquisa ou escolha uma categoria.
-                </h4>)
-              : categoriesProducts.map((element, index) => (
-                <div data-testid="product" key={ index }>
-                  <p>{ element.title }</p>
-                  <img
-                    src={ element.thumbnail }
-                    alt={ element.name }
-                  />
-                  <p>{ `R$ ${element.price} `}</p>
-                </div>
-              ))
+                </h4>
+              ) : ''
           }
-        </div>
+          {
+            (products.length === 0 && searchBtnClick)
+              ? <h2>Nenhum produto foi encontrado</h2>
+              : (
+                products.map(({ title, thumbnail, price, id }, index) => (
+                  <div key={ index } data-testid="product">
+                    <Link data-testid="product-detail-link" to={ `/product/${id}` }>
+                      <h2>{ title }</h2>
+                      <img src={ thumbnail } alt={ title } />
+                      <h3>{ price }</h3>
+                    </Link>
+                  </div>
+                )))
+          }
+          {
+            categoriesBtnClick
+            && categoriesProducts.map(({ title, thumbnail, price, id }, index) => (
+              <div key={ index } data-testid="product">
+                <Link data-testid="product-detail-link" to={ `/product/${id}` }>
+                  <h2>{ title }</h2>
+                  <img src={ thumbnail } alt={ title } />
+                  <h3>{ price }</h3>
+                </Link>
+              </div>
+            ))
+          }
+        </main>
       </div>
     );
   }
