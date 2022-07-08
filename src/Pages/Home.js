@@ -53,7 +53,10 @@ class Home extends React.Component {
               : categoriesProducts.map((element, index) => (
                 <div data-testid="product" key={ index }>
                   <p>{ element.title }</p>
-                  <img src={ element.thumbnail } alt={ element.name } />
+                  <img
+                    src={ element.thumbnail }
+                    alt={ element.name }
+                  />
                   <p>{ `R$ ${element.price} `}</p>
                 </div>
               ))

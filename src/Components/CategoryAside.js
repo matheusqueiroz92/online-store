@@ -23,7 +23,6 @@ class CategoryAside extends React.Component {
   render() {
     const { handleClick } = this.props;
     const { categories } = this.state;
-    // console.log(categories);
     return (
       <section>
         <h3>Categorias</h3>
