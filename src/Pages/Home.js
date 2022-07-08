@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Button from '../Components/Button';
 import CategoryAside from '../Components/CategoryAside';
+
 import { getProductsFromCategoryAndQuery } from '../services/api';
 
 class Home extends React.Component {
@@ -37,7 +39,8 @@ class Home extends React.Component {
 
   handleClickCategoryBtn = async ({ target }) => {
     const productsToShow = await
-    getProductsFromCategoryAndQuery(target.innerText);
+    getProductsFromCategoryAndQuery('', target.innerText);
+    // console.log(productsToShow.results);
 
     this.setState({
       searchBtnClick: false,
@@ -90,21 +93,25 @@ class Home extends React.Component {
             (products.length === 0 && searchBtnClick)
               ? <h2>Nenhum produto foi encontrado</h2>
               : (
-                products.map(({ title, thumbnail, price }, index) => (
+                products.map(({ title, thumbnail, price, id }, index) => (
                   <div key={ index } data-testid="product">
-                    <h2>{ title }</h2>
-                    <img src={ thumbnail } alt={ title } />
-                    <h3>{ price }</h3>
+                    <Link data-testid="product-detail-link" to={ `/product/${id}` }>
+                      <h2>{ title }</h2>
+                      <img src={ thumbnail } alt={ title } />
+                      <h3>{ price }</h3>
+                    </Link>
                   </div>
                 )))
           }
           {
             categoriesBtnClick
-            && categoriesProducts.map(({ title, thumbnail, price }, index) => (
+            && categoriesProducts.map(({ title, thumbnail, price, id }, index) => (
               <div key={ index } data-testid="product">
-                <h2>{ title }</h2>
-                <img src={ thumbnail } alt={ title } />
-                <h3>{ price }</h3>
+                <Link data-testid="product-detail-link" to={ `/product/${id}` }>
+                  <h2>{ title }</h2>
+                  <img src={ thumbnail } alt={ title } />
+                  <h3>{ price }</h3>
+                </Link>
               </div>
             ))
           }
