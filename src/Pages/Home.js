@@ -63,7 +63,8 @@ class Home extends React.Component {
         <CategoryAside />
         <main>
           {
-            products.length === 0 && thereWasSearch ? <h2>Nenhum produto foi encontrado</h2>
+            products.length === 0 && thereWasSearch
+              ? <h2>Nenhum produto foi encontrado</h2>
               : (
                 products.map(({ title, thumbnail, price }, index) => (
                   <div key={ index } data-testid="product">
