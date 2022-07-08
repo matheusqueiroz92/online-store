@@ -67,7 +67,7 @@ class Home extends React.Component {
                 data-testid="query-button"
                 onClick={ this.handleClickSearchBtn }
               >
-                Pesquisar
+                Pesquisar:
               </button>
             </form>
           </div>
