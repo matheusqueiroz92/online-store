@@ -21,7 +21,7 @@ class CategoryAside extends React.Component {
 
   render() {
     const { categories } = this.state;
-    console.log(categories);
+
     return (
       <section>
         <h3>Categorias</h3>
