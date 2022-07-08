@@ -9,8 +9,10 @@ class Home extends React.Component {
 
     this.state = {
       searchText: '',
-      thereWasSearch: false,
       products: [],
+      categoriesProducts: [],
+      searchBtnClick: false,
+      categoriesBtnClick: false,
     };
   }
 
@@ -21,18 +23,32 @@ class Home extends React.Component {
     });
   }
 
-  handleClick = async () => {
+  handleClickSearchBtn = async () => {
     const { searchText } = this.state;
 
     const request = await getProductsFromCategoryAndQuery('', searchText);
-    console.log(request);
     const products = request.results;
+    this.setState({
+      products,
+      searchBtnClick: true,
+      categoriesBtnClick: false,
+    });
+  }
 
-    this.setState({ products, thereWasSearch: true });
+  handleClickCategoryBtn = async ({ target }) => {
+    const productsToShow = await
+    getProductsFromCategoryAndQuery(target.innerText);
+
+    this.setState({
+      searchBtnClick: false,
+      categoriesProducts: productsToShow.results,
+      categoriesBtnClick: true,
+    });
   }
 
   render() {
-    const { searchText, products, thereWasSearch } = this.state;
+    const { searchText, products, categoriesProducts,
+      categoriesBtnClick, searchBtnClick } = this.state;
 
     return (
       <div>
@@ -49,7 +65,7 @@ class Home extends React.Component {
               <button
                 type="button"
                 data-testid="query-button"
-                onClick={ this.handleClick }
+                onClick={ this.handleClickSearchBtn }
               >
                 Pesquisar
               </button>
@@ -57,13 +73,21 @@ class Home extends React.Component {
           </div>
           <Button />
         </header>
-        <h4 data-testid="home-initial-message">
-          Digite algum termo de pesquisa ou escolha uma categoria.
-        </h4>
-        <CategoryAside />
+        <CategoryAside
+          handleClickCategoryBtn={ this.handleClickCategoryBtn }
+        />
         <main>
           {
-            products.length === 0 && thereWasSearch
+            (categoriesProducts.length === 0
+              && products.length === 0)
+              ? (
+                <h4 data-testid="home-initial-message">
+                  Digite algum termo de pesquisa ou escolha uma categoria.
+                </h4>
+              ) : ''
+          }
+          {
+            (products.length === 0 && searchBtnClick)
               ? <h2>Nenhum produto foi encontrado</h2>
               : (
                 products.map(({ title, thumbnail, price }, index) => (
@@ -73,6 +97,16 @@ class Home extends React.Component {
                     <h3>{ price }</h3>
                   </div>
                 )))
+          }
+          {
+            categoriesBtnClick
+            && categoriesProducts.map(({ title, thumbnail, price }, index) => (
+              <div key={ index } data-testid="product">
+                <h2>{ title }</h2>
+                <img src={ thumbnail } alt={ title } />
+                <h3>{ price }</h3>
+              </div>
+            ))
           }
         </main>
       </div>

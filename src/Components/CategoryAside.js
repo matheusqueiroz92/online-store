@@ -1,10 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { getCategories } from '../services/api';
 
 class CategoryAside extends React.Component {
   constructor() {
     super();
-
     this.state = {
       categories: [],
     };
@@ -20,8 +20,8 @@ class CategoryAside extends React.Component {
   }
 
   render() {
+    const { handleClickCategoryBtn } = this.props;
     const { categories } = this.state;
-
     return (
       <section>
         <h3>Categorias</h3>
@@ -32,6 +32,7 @@ class CategoryAside extends React.Component {
                 <button
                   type="button"
                   data-testid="category"
+                  onClick={ handleClickCategoryBtn }
                 >
                   { name }
                 </button>
@@ -43,5 +44,7 @@ class CategoryAside extends React.Component {
     );
   }
 }
-
+CategoryAside.propTypes = {
+  handleClickCategoryBtn: PropTypes.func,
+}.isRequired;
 export default CategoryAside;
