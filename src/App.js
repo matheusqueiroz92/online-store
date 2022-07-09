@@ -10,10 +10,9 @@ class App extends React.Component {
     super();
 
     this.state = {
-      cartItems: [{
-        id: '',
-      }],
+      cartItems: [{ id: '' }],
       filter: [],
+      text: 'Seu carrinho está vazio',
     };
   }
 
@@ -37,12 +36,12 @@ class App extends React.Component {
     cartItems.slice(1).forEach(({ id }) => {
       uniqueIds[id] = (uniqueIds[id] || 0) + 1;
     });
-    // console.log(Object.entries(uniqueIds).map((id) => console.log(id[0], id[1])));
+
     return Object.entries(uniqueIds);
   }
 
   render() {
-    const { filter } = this.state;
+    const { filter, text } = this.state;
 
     return (
       <BrowserRouter>
@@ -53,7 +52,17 @@ class App extends React.Component {
         />
         <Route
           path="/cart"
-          render={ (props) => <Cart { ...props } filter={ filter } /> }
+          render={ (props) => (filter.length === 0
+            ? <h2 data-testid="shopping-cart-empty-message">{ text }</h2>
+            : filter
+              .map((el, index) => (
+                <Cart
+                  key={ index }
+                  { ...props }
+                  filter={ filter }
+                  id={ el[0] }
+                  quantity={ el[1] }
+                />))) }
         />
         <Route
           path="/product/:id"

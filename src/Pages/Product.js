@@ -22,14 +22,11 @@ class Product extends React.Component {
       },
     } } = this.props;
 
-    // console.log(id);
-
     const productCalled = await getProductById(id);
 
     this.setState({
       productView: productCalled,
     });
-    console.log(productCalled.title);
   }
 
   render() {
