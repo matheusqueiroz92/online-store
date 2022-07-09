@@ -6,21 +6,33 @@ import Home from './Pages/Home';
 import Product from './Pages/Product';
 
 class App extends React.Component {
-  // constructor() {
-  //   super();
+  constructor() {
+    super();
 
-  //   this.state = {
-  //     cart: [],
-  //   };
-  // }
+    this.state = {
+      cartItems: '',
+    };
+  }
+
+  addToCart = ({ target }) => {
+    const { name } = target;
+    this.setState({
+      cartItems: name,
+    });
+  }
 
   render() {
+    const { cartItems } = this.state;
     return (
       <BrowserRouter>
-        <Route exact path="/" component={ Home } />
+        <Route
+          exact
+          path="/"
+          render={ (props) => <Home { ...props } addToCart={ this.addToCart } /> }
+        />
         <Route
           path="/cart"
-          render={ (props) => <Cart { ...props } /> }
+          render={ (props) => <Cart { ...props } cartItems={ cartItems } /> }
         />
         <Route
           path="/product/:id"

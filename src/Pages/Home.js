@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Button from '../Components/Button';
 import CategoryAside from '../Components/CategoryAside';
 
@@ -51,6 +52,7 @@ class Home extends React.Component {
   render() {
     const { searchText, products, categoriesProducts,
       categoriesBtnClick, searchBtnClick } = this.state;
+    const { addToCart } = this.props;
 
     return (
       <div>
@@ -99,6 +101,14 @@ class Home extends React.Component {
                       <img src={ thumbnail } alt={ title } />
                       <h3>{ price }</h3>
                     </Link>
+                    <button
+                      type="button"
+                      data-testid="product-add-to-cart"
+                      onClick={ addToCart }
+                      name={ id }
+                    >
+                      Adicionar ao Carrinho
+                    </button>
                   </div>
                 )))
           }
@@ -111,6 +121,14 @@ class Home extends React.Component {
                   <img src={ thumbnail } alt={ title } />
                   <h3>{ price }</h3>
                 </Link>
+                <button
+                  type="button"
+                  data-testid="product-add-to-cart"
+                  onClick={ addToCart }
+                  name={ id }
+                >
+                  Adicionar ao Carrinho
+                </button>
               </div>
             ))
           }
@@ -119,5 +137,9 @@ class Home extends React.Component {
     );
   }
 }
+
+Home.propTypes = {
+  addToCart: PropTypes.func.isRequired,
+};
 
 export default Home;
