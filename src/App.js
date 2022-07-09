@@ -10,19 +10,40 @@ class App extends React.Component {
     super();
 
     this.state = {
-      cartItems: '',
+      cartItems: [{
+        id: '',
+      }],
+      filter: [],
     };
   }
 
   addToCart = ({ target }) => {
     const { name } = target;
-    this.setState({
-      cartItems: name,
+    this.setState((prevState) => ({
+      cartItems: [...prevState.cartItems, { id: name }],
+    }), () => {
+      const filterProducts = this.filterProductsIds();
+
+      this.setState({
+        filter: filterProducts,
+      });
     });
   }
 
-  render() {
+  filterProductsIds = () => {
     const { cartItems } = this.state;
+    const uniqueIds = {};
+
+    cartItems.slice(1).forEach(({ id }) => {
+      uniqueIds[id] = (uniqueIds[id] || 0) + 1;
+    });
+    // console.log(Object.entries(uniqueIds).map((id) => console.log(id[0], id[1])));
+    return Object.entries(uniqueIds);
+  }
+
+  render() {
+    const { filter } = this.state;
+
     return (
       <BrowserRouter>
         <Route
@@ -32,7 +53,7 @@ class App extends React.Component {
         />
         <Route
           path="/cart"
-          render={ (props) => <Cart { ...props } cartItems={ cartItems } /> }
+          render={ (props) => <Cart { ...props } filter={ filter } /> }
         />
         <Route
           path="/product/:id"
