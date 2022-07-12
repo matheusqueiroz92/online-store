@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getProductById } from '../services/api';
-import { addEvaluation, getEvaluations, saveEvaluations } from '../services/LoadEvaluations';
+import { addEvaluation, getEvaluations } from '../services/LoadEvaluations';
 
 class Product extends React.Component {
   constructor() {
@@ -12,7 +12,7 @@ class Product extends React.Component {
       inputEmail: '',
       inputEvaluation: '',
       rating: '',
-      allEvaluations: [],
+      allEvaluations: '',
     });
   }
 
@@ -38,28 +38,25 @@ class Product extends React.Component {
   submitBtnReview = (event) => {
     event.preventDefault();
     const { inputEmail, inputEvaluation, rating } = this.state;
-    const evaluationArray = [
-      inputEmail,
-      inputEvaluation,
-      rating,
-    ];
+    const evaluationArray = {
+      email: inputEmail,
+      evaluation: inputEvaluation,
+      avaliation: rating,
+    };
     addEvaluation(evaluationArray);
     this.setState({
       inputEmail: '',
       inputEvaluation: '',
       rating: '',
     });
-    console.log(localStorage.evaluations);
+    this.loadLocalStorage();
   }
 
   loadLocalStorage = () => {
     const load = getEvaluations('evaluations');
-    this.setState((prevState) => ({
-      inputEmail: '',
-      inputEvaluation: '',
-      rating: [...prevState.rating, load],
-    }));
-    // console.log(load);
+    this.setState({
+      allEvaluations: load,
+    });
   }
 
   onInputChange = ({ target }) => {
@@ -71,7 +68,6 @@ class Product extends React.Component {
 
   render() {
     const { productView, inputEmail, inputEvaluation, allEvaluations } = this.state;
-    console.log(allEvaluations);
 
     const maxIndex = 5;
     return (
@@ -96,7 +92,7 @@ class Product extends React.Component {
                 {index + 1}
                 <input
                   type="radio"
-                  data-testid={ `${index}-rating` }
+                  data-testid={ `${index + 1}-rating` }
                   value={ index + 1 }
                   name="rating"
                 />
@@ -118,28 +114,19 @@ class Product extends React.Component {
             Avaliar
           </button>
         </form>
-        {/* {
-          allEvaluations.length === 0
+        {
+          !allEvaluations
             ? <h3>Nenhum comentário</h3>
             : (
-              allEvaluations.map((element, index) => (
+              allEvaluations.map(({ email, evaluation, avaliation }, index) => (
                 <div key={ index }>
-                  <h3>{ element.inputEmail }</h3>
+                  <h3>{email}</h3>
+                  <h3>{avaliation}</h3>
+                  <h3>{evaluation}</h3>
                 </div>
               ))
             )
-        } */}
-        {/* {
-          allEvaluations.length === 0
-            ? <h3>Nenhum comentário</h3>
-            : (
-              allEvaluations.map((element) => element.allEvaluations.map((el, index) => (
-                <div key={ index }>
-                  <h3>{el.inputEmail}</h3>
-                  <h3>{el.rating}</h3>
-                  <h3>{el.inputEvaluation}</h3>
-                </div>))))
-        } */}
+        }
       </section>
     );
   }
