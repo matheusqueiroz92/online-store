@@ -1,3 +1,7 @@
+if (!JSON.parse(localStorage.getItem('evaluations'))) {
+  localStorage.setItem('evaluations', JSON.stringify([]));
+}
+
 export function getEvaluations(key) {
   const request = JSON.parse(localStorage.getItem(key));
 
@@ -8,9 +12,13 @@ export function saveEvaluations(evaluations) {
   localStorage.setItem('evaluations', JSON.stringify(evaluations));
 }
 
-// const readFavoriteSongs = () => JSON.parse(localStorage.getItem(FAVORITE_SONGS_KEY));
+export const readEvaluations = () => {
+  JSON.parse(localStorage.getItem('evaluations'));
+};
 
-// export const getFavoriteSongs = () => new Promise((resolve) => {
-//   const favoriteSongs = readFavoriteSongs();
-//   simulateRequest(favoriteSongs)(resolve);
-// });
+export const addEvaluation = (evaluation) => {
+  if (evaluation) {
+    const listedEvaluation = getEvaluations('evaluations');
+    saveEvaluations([...listedEvaluation, evaluation]);
+  }
+};
