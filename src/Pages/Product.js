@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getProductById } from '../services/api';
+import { getEvaluations, saveEvaluations } from '../services/LoadEvaluations';
 
 class Product extends React.Component {
   constructor() {
@@ -10,11 +11,14 @@ class Product extends React.Component {
       productView: [],
       inputEmail: '',
       inputEvaluation: '',
+      rating: '',
+      allEvaluations: [],
     });
   }
 
   componentDidMount() {
     this.callProduct();
+    this.loadLocalStorage();
   }
 
   callProduct = async () => {
@@ -31,17 +35,33 @@ class Product extends React.Component {
     });
   }
 
+  submitBtnReview = (event) => {
+    event.preventDefault();
+    saveEvaluations(this.state);
+    this.setState({
+      inputEmail: '',
+      inputEvaluation: '',
+      rating: '',
+    });
+  }
+
+  loadLocalStorage = () => {
+    const load = getEvaluations('evaluations');
+    this.setState((prevState) => ({
+      allEvaluations: [...prevState.allEvaluations, load],
+    }));
+  }
+
   onInputChange = ({ target }) => {
     const { name, value } = target;
     this.setState({
       [name]: value,
-      rating: value,
     });
   }
 
   render() {
-    const { productView, inputEmail, inputEvaluation, rating } = this.state;
-    console.log(inputEvaluation, rating);
+    const { productView, inputEmail, inputEvaluation, allEvaluations } = this.state;
+
     const maxIndex = 5;
     return (
       <section>
@@ -67,6 +87,7 @@ class Product extends React.Component {
                   type="radio"
                   data-testid={ `${index}-rating` }
                   value={ index + 1 }
+                  name="rating"
                 />
               </div>
             ))
@@ -86,6 +107,17 @@ class Product extends React.Component {
             Avaliar
           </button>
         </form>
+        {
+          allEvaluations.length === 0
+            ? <h3>Nenhum comentário</h3>
+            : (
+              allEvaluations.map((element) => element.allEvaluations.map((el, index) => (
+                <div key={ index }>
+                  <h3>{el.inputEmail}</h3>
+                  <h3>{el.rating}</h3>
+                  <h3>{el.inputEvaluation}</h3>
+                </div>))))
+        }
       </section>
     );
   }
