@@ -144,11 +144,7 @@ class Product extends React.Component {
 }
 
 Product.propTypes = {
-  match: {
-    params: {
-      id: PropTypes.string,
-    },
-  },
+  addToCart: PropTypes.func,
 }.isRequired;
 
 export default Product;

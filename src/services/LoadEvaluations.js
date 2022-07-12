@@ -1,7 +1,3 @@
-// if (!JSON.parse(localStorage.getItem('evaluations'))) {
-//   localStorage.setItem('evaluations', JSON.stringify([]));
-// }
-
 export function getEvaluations(key) {
   const request = JSON.parse(localStorage.getItem(key));
 
@@ -11,10 +7,6 @@ export function getEvaluations(key) {
 export function saveEvaluations(evaluations) {
   localStorage.setItem('evaluations', JSON.stringify(evaluations));
 }
-
-export const readEvaluations = () => {
-  JSON.parse(localStorage.getItem('evaluations'));
-};
 
 export const addEvaluation = (evaluation) => {
   if (!JSON.parse(localStorage.getItem('evaluations'))) {
