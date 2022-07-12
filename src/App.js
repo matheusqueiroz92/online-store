@@ -66,7 +66,7 @@ class App extends React.Component {
         />
         <Route
           path="/product/:id"
-          render={ (props) => <Product { ...props } /> }
+          render={ (props) => <Product { ...props } addToCart={ this.addToCart } /> }
         />
       </BrowserRouter>
     );

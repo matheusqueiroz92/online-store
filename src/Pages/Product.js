@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getProductById } from '../services/api';
 import { addEvaluation, getEvaluations } from '../services/LoadEvaluations';
+import Button from '../Components/Button';
 
 class Product extends React.Component {
   constructor() {
@@ -68,7 +69,8 @@ class Product extends React.Component {
 
   render() {
     const { productView, inputEmail, inputEvaluation, allEvaluations } = this.state;
-
+    const { addToCart } = this.props;
+    console.log(productView);
     const maxIndex = 5;
     return (
       <section>
@@ -78,6 +80,15 @@ class Product extends React.Component {
           <h3>{ productView.price }</h3>
           <p>{ productView.status }</p>
         </div>
+        <button
+          type="button"
+          data-testid="product-detail-add-to-cart"
+          onClick={ addToCart }
+          name={ productView.id }
+        >
+          Adicionar ao Carrinho
+        </button>
+        <Button />
         <form>
           <input
             type="text"
