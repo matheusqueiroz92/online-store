@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { getProductById } from '../services/api';
 
 class Cart extends React.Component {
   constructor() {
@@ -15,12 +14,12 @@ class Cart extends React.Component {
     this.handleCartItems();
   }
 
-  handleCartItems = async () => {
-    const { id } = this.props;
-    const product = await getProductById(id);
+  handleCartItems = () => {
+    const { showProducts, id } = this.props;
+    const targetProduct = showProducts.find((el) => el.id === id);
 
     this.setState({
-      productsIds: product,
+      productsIds: targetProduct,
     });
   }
 

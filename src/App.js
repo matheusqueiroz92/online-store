@@ -9,80 +9,72 @@ class App extends React.Component {
   constructor() {
     super();
 
+    this.showProducts = '';
+
     this.state = {
-      cartItems: [{ id: '' }],
-      filter: [],
+      cartItems: {},
       text: 'Seu carrinho está vazio',
     };
   }
 
   addToCart = ({ target }) => {
-    const { name } = target;
-    this.setState((prevState) => ({
-      cartItems: [...prevState.cartItems, { id: name }],
-    }), () => {
-      const filterProducts = this.filterProductsIds();
-
-      this.setState({
-        filter: filterProducts,
-      });
-    });
-  }
-
-  filterProductsIds = () => {
+    const { name: id } = target;
     const { cartItems } = this.state;
-    const uniqueIds = {};
 
-    cartItems.slice(1).forEach(({ id }) => {
-      uniqueIds[id] = (uniqueIds[id] || 0) + 1;
+    this.setState({
+      cartItems: {
+        ...cartItems,
+        [id]: (cartItems[id] || 0) + 1,
+      },
     });
-
-    return Object.entries(uniqueIds);
   }
 
   decreaseQuantity = ({ target }) => {
     const { cartItems } = this.state;
-    const { name } = target;
+    const { name: id } = target;
 
-    // const verifyItem = cartItems.filter(({ id }) => id === name).length;
-    // console.log(verifyItem);
-    const indexToRemove = cartItems.indexOf(cartItems.find(({ id }) => id === name));
-    cartItems.splice(1, indexToRemove);
+    const allProducts = { ...cartItems };
+    if (allProducts[id] === 1) {
+      return;
+    }
+
+    allProducts[id] -= 1;
+
     this.setState({
-      cartItems,
-    }, () => {
-      const newFilter = this.filterProductsIds();
-
-      this.setState({
-        filter: newFilter,
-      });
+      cartItems: allProducts,
     });
   }
 
+  getInfoFromHome = (info) => {
+    this.showProducts = info;
+  };
+
   render() {
-    const { filter, text } = this.state;
+    const { text, cartItems } = this.state;
 
     return (
       <BrowserRouter>
         <Route
           exact
           path="/"
-          render={ (props) => <Home { ...props } addToCart={ this.addToCart } /> }
+          render={ () => (<Home
+            addToCart={ this.addToCart }
+            getInfoFromHome={ this.getInfoFromHome }
+          />) }
         />
         <Route
           path="/cart"
-          render={ (props) => (filter.length === 0
+          render={ () => (Object.entries(cartItems).length === 0
             ? <h2 data-testid="shopping-cart-empty-message">{ text }</h2>
-            : filter
-              .map((el, index) => (
+            : Object.entries(cartItems)
+              .map(([id, quantity]) => (
                 <Cart
-                  key={ index }
-                  { ...props }
-                  filter={ filter }
-                  id={ el[0] }
-                  quantity={ el[1] }
+                  key={ id }
+                  id={ id }
+                  quantity={ quantity }
                   addToCart={ this.addToCart }
                   decreaseQuantity={ this.decreaseQuantity }
+                  showProducts={ this.showProducts }
                 />))) }
         />
         <Route

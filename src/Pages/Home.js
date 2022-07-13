@@ -15,8 +15,14 @@ class Home extends React.Component {
       products: [],
       categoriesProducts: [],
       searchBtnClick: false,
-      categoriesBtnClick: false,
     };
+  }
+
+  componentDidUpdate() {
+    const { categoriesProducts } = this.state;
+    const { getInfoFromHome } = this.props;
+
+    getInfoFromHome(categoriesProducts);
   }
 
   onInputChange = ({ target }) => {
@@ -32,26 +38,25 @@ class Home extends React.Component {
     const request = await getProductsFromCategoryAndQuery('', searchText);
     const products = request.results;
     this.setState({
-      products,
+      categoriesProducts: products,
       searchBtnClick: true,
-      categoriesBtnClick: false,
     });
   }
 
   handleClickCategoryBtn = async ({ target }) => {
-    const productsToShow = await
-    getProductsFromCategoryAndQuery('', target.innerText);
+    const productsToShow = await getProductsFromCategoryAndQuery('', target.innerText);
+
+    const productsInfo = productsToShow;
 
     this.setState({
       searchBtnClick: false,
-      categoriesProducts: productsToShow.results,
-      categoriesBtnClick: true,
+      categoriesProducts: productsInfo.results,
     });
   }
 
   render() {
     const { searchText, products, categoriesProducts,
-      categoriesBtnClick, searchBtnClick } = this.state;
+      searchBtnClick } = this.state;
     const { addToCart } = this.props;
 
     return (
@@ -91,10 +96,10 @@ class Home extends React.Component {
               ) : ''
           }
           {
-            (products.length === 0 && searchBtnClick)
+            (categoriesProducts.length === 0 && searchBtnClick)
               ? <h2>Nenhum produto foi encontrado</h2>
               : (
-                products.map(({ title, thumbnail, price, id }, index) => (
+                categoriesProducts.map(({ title, thumbnail, price, id }, index) => (
                   <div key={ index } data-testid="product">
                     <Link data-testid="product-detail-link" to={ `/product/${id}` }>
                       <h2>{ title }</h2>
@@ -112,26 +117,6 @@ class Home extends React.Component {
                   </div>
                 )))
           }
-          {
-            categoriesBtnClick
-            && categoriesProducts.map(({ title, thumbnail, price, id }, index) => (
-              <div key={ index } data-testid="product">
-                <Link data-testid="product-detail-link" to={ `/product/${id}` }>
-                  <h2>{ title }</h2>
-                  <img src={ thumbnail } alt={ title } />
-                  <h3>{ price }</h3>
-                </Link>
-                <button
-                  type="button"
-                  data-testid="product-add-to-cart"
-                  onClick={ addToCart }
-                  name={ id }
-                >
-                  Adicionar ao Carrinho
-                </button>
-              </div>
-            ))
-          }
         </main>
       </div>
     );
@@ -140,6 +125,7 @@ class Home extends React.Component {
 
 Home.propTypes = {
   addToCart: PropTypes.func.isRequired,
+  getInfoFromHome: PropTypes.func.isRequired,
 };
 
 export default Home;
