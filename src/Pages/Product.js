@@ -70,7 +70,7 @@ class Product extends React.Component {
   render() {
     const { productView, inputEmail, inputEvaluation, allEvaluations } = this.state;
     const { addToCart } = this.props;
-    console.log(productView);
+
     const maxIndex = 5;
     return (
       <section>

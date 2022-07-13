@@ -40,6 +40,25 @@ class App extends React.Component {
     return Object.entries(uniqueIds);
   }
 
+  decreaseQuantity = ({ target }) => {
+    const { cartItems } = this.state;
+    const { name } = target;
+
+    // const verifyItem = cartItems.filter(({ id }) => id === name).length;
+    // console.log(verifyItem);
+    const indexToRemove = cartItems.indexOf(cartItems.find(({ id }) => id === name));
+    cartItems.splice(1, indexToRemove);
+    this.setState({
+      cartItems,
+    }, () => {
+      const newFilter = this.filterProductsIds();
+
+      this.setState({
+        filter: newFilter,
+      });
+    });
+  }
+
   render() {
     const { filter, text } = this.state;
 
@@ -62,6 +81,8 @@ class App extends React.Component {
                   filter={ filter }
                   id={ el[0] }
                   quantity={ el[1] }
+                  addToCart={ this.addToCart }
+                  decreaseQuantity={ this.decreaseQuantity }
                 />))) }
         />
         <Route

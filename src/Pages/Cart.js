@@ -26,7 +26,7 @@ class Cart extends React.Component {
 
   render() {
     const { productsIds } = this.state;
-    const { id, quantity } = this.props;
+    const { id, quantity, addToCart, decreaseQuantity } = this.props;
 
     return (
       <div>
@@ -34,11 +34,27 @@ class Cart extends React.Component {
           <h2 data-testid="shopping-cart-product-name">{ productsIds.title }</h2>
           <img src={ productsIds.thumbnail } alt={ id } />
           <h3>{ `Preço por unidade: ${productsIds.price}` }</h3>
+          <button
+            type="button"
+            data-testid="product-increase-quantity"
+            onClick={ addToCart }
+            name={ id }
+          >
+            +
+          </button>
           <h3
             data-testid="shopping-cart-product-quantity"
           >
             { `Quantidade: ${quantity}` }
           </h3>
+          <button
+            type="button"
+            data-testid="product-decrease-quantity"
+            onClick={ decreaseQuantity }
+            name={ id }
+          >
+            -
+          </button>
         </div>
       </div>
     );
