@@ -24,3 +24,15 @@ export async function getProductById(id) {
 
   return jsonId;
 }
+
+export function getItemsFromLocalStorage() {
+  if (localStorage.getItem('cartItems')) {
+    return JSON.parse(localStorage.getItem('cartItems'));
+  }
+  return undefined;
+}
+
+export function setItemsToLocalStorage(newItem) {
+  const newItemstr = JSON.stringify(newItem);
+  localStorage.setItem('cartItems', newItemstr);
+}

@@ -30,6 +30,7 @@ class Product extends React.Component {
 
     if (showProducts.length < 1) return;
     const targetID = showProducts.find((el) => el.id === id);
+
     getInfoFromHome(showProducts);
     this.setState({
       productView: targetID,

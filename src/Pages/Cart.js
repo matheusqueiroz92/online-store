@@ -17,6 +17,7 @@ class Cart extends React.Component {
 
   handleCartItems = () => {
     const { showProducts, id } = this.props;
+    console.log(showProducts.find((el) => el.id === id));
     const targetProduct = showProducts.find((el) => el.id === id);
 
     this.setState({
@@ -47,6 +48,7 @@ class Cart extends React.Component {
             data-testid="product-increase-quantity"
             onClick={ addToCart }
             name={ id }
+            disabled={ (quantity >= productsIds.available_quantity) }
           >
             +
           </button>

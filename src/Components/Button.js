@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 class Button extends React.Component {
   showTotalQuantity() {
     const { quantity } = this.props;
-    console.log(quantity);
+    // console.log(quantity);
 
     // if (JSON.parse(localStorage.getItem('quantity'))) {
     //   showQuantity = JSON.parse(localStorage.getItem('quantity'));

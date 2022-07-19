@@ -5,17 +5,26 @@ import Cart from './Pages/Cart';
 import Checkout from './Pages/Checkout';
 import Home from './Pages/Home';
 import Product from './Pages/Product';
+import { getItemsFromLocalStorage, setItemsToLocalStorage } from './services/api';
 
 class App extends React.Component {
   constructor() {
     super();
 
-    this.showProducts = '';
+    this.showProducts = [];
 
     this.state = {
       cartItems: {},
       text: 'Seu carrinho está vazio',
     };
+  }
+
+  componentDidMount() {
+    if (getItemsFromLocalStorage()) {
+      this.setState({
+        cartItems: getItemsFromLocalStorage(),
+      });
+    }
   }
 
   addToCart = ({ target }) => {
@@ -27,19 +36,11 @@ class App extends React.Component {
         ...cartItems,
         [id]: (cartItems[id] || 0) + 1,
       },
+    }, () => {
+      const { cartItems: attCartItems } = this.state;
+      setItemsToLocalStorage(attCartItems);
     });
   }
-
-  // saveQuantity = () => {
-  //   const { cartItems } = this.state;
-  //   // if (JSON.parse(localStorage.getItem('quantity'))) {
-  //   //   localStorage.setItem('quantity', JSON.stringify([]));
-  //   // }
-  //   // // if (cartItems) {
-  //   // //   // const listedEvaluation = JSON.parse(localStorage.getItem('quantity'));
-  //   localStorage.setItem('quantity', JSON.stringify(cartItems));
-  //   // }
-  // }
 
   decreaseQuantity = ({ target }) => {
     const { cartItems } = this.state;
@@ -98,7 +99,7 @@ class App extends React.Component {
               addToCart={ this.addToCart }
               showProducts={ this.showProducts }
               getInfoFromHome={ this.getInfoFromHome }
-              quantity={ cartItems }
+              quantity={ Object.entries(cartItems).map((el) => el[1]) }
             />) }
         />
         <Route path="/checkout" render={ (props) => <Checkout { ...props } /> } />

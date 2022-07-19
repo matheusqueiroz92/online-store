@@ -17,6 +17,13 @@ class Home extends React.Component {
     };
   }
 
+  // componentDidMount() {
+  //   const { categoriesProducts } = this.state;
+  //   const { getInfoFromHome } = this.props;
+
+  //   getInfoFromHome(categoriesProducts);
+  // }
+
   componentDidUpdate() {
     const { categoriesProducts } = this.state;
     const { getInfoFromHome } = this.props;
@@ -57,7 +64,6 @@ class Home extends React.Component {
     const { searchText, products, categoriesProducts,
       searchBtnClick } = this.state;
     const { addToCart, quantity } = this.props;
-    console.log(categoriesProducts);
 
     return (
       <div>
