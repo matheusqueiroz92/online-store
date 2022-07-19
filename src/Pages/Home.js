@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Button from '../Components/Button';
 import CategoryAside from '../Components/CategoryAside';
-
 import { getProductsFromCategoryAndQuery } from '../services/api';
 
 class Home extends React.Component {
@@ -58,6 +57,7 @@ class Home extends React.Component {
     const { searchText, products, categoriesProducts,
       searchBtnClick } = this.state;
     const { addToCart, quantity } = this.props;
+    console.log(categoriesProducts);
 
     return (
       <div>
@@ -101,23 +101,29 @@ class Home extends React.Component {
             (categoriesProducts.length === 0 && searchBtnClick)
               ? <h2>Nenhum produto foi encontrado</h2>
               : (
-                categoriesProducts.map(({ title, thumbnail, price, id }, index) => (
-                  <div key={ index } data-testid="product">
-                    <Link data-testid="product-detail-link" to={ `/product/${id}` }>
-                      <h2>{ title }</h2>
-                      <img src={ thumbnail } alt={ title } />
-                      <h3>{ price }</h3>
-                    </Link>
-                    <button
-                      type="button"
-                      data-testid="product-add-to-cart"
-                      onClick={ addToCart }
-                      name={ id }
-                    >
-                      Adicionar ao Carrinho
-                    </button>
-                  </div>
-                )))
+                categoriesProducts.map(
+                  ({ title, thumbnail, price, id, shipping }, index) => (
+                    <div key={ index } data-testid="product">
+                      {
+                        shipping.free_shipping
+                        && <h3 data-testid="free-shipping">Frete Grátis</h3>
+                      }
+                      <Link data-testid="product-detail-link" to={ `/product/${id}` }>
+                        <h2>{ title }</h2>
+                        <img src={ thumbnail } alt={ title } />
+                        <h3>{ price }</h3>
+                      </Link>
+                      <button
+                        type="button"
+                        data-testid="product-add-to-cart"
+                        onClick={ addToCart }
+                        name={ id }
+                      >
+                        Adicionar ao Carrinho
+                      </button>
+                    </div>
+                  ),
+                ))
           }
         </main>
       </div>

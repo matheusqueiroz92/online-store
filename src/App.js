@@ -30,6 +30,17 @@ class App extends React.Component {
     });
   }
 
+  // saveQuantity = () => {
+  //   const { cartItems } = this.state;
+  //   // if (JSON.parse(localStorage.getItem('quantity'))) {
+  //   //   localStorage.setItem('quantity', JSON.stringify([]));
+  //   // }
+  //   // // if (cartItems) {
+  //   // //   // const listedEvaluation = JSON.parse(localStorage.getItem('quantity'));
+  //   localStorage.setItem('quantity', JSON.stringify(cartItems));
+  //   // }
+  // }
+
   decreaseQuantity = ({ target }) => {
     const { cartItems } = this.state;
     const { name: id } = target;
@@ -87,7 +98,7 @@ class App extends React.Component {
               addToCart={ this.addToCart }
               showProducts={ this.showProducts }
               getInfoFromHome={ this.getInfoFromHome }
-              quantity={ Object.entries(cartItems).map((el) => el[1]) }
+              quantity={ cartItems }
             />) }
         />
         <Route path="/checkout" render={ (props) => <Checkout { ...props } /> } />

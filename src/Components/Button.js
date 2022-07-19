@@ -5,11 +5,18 @@ import { Link } from 'react-router-dom';
 class Button extends React.Component {
   showTotalQuantity() {
     const { quantity } = this.props;
-    let showQuantity = 0;
+    console.log(quantity);
 
-    quantity.forEach((el) => {
-      showQuantity += el;
-    });
+    // if (JSON.parse(localStorage.getItem('quantity'))) {
+    //   showQuantity = JSON.parse(localStorage.getItem('quantity'));
+    // }
+    let showQuantity = 0;
+    if (quantity.length > 0) {
+      quantity.forEach((el) => {
+        showQuantity += el;
+      });
+    }
+    // localStorage.setItem('quantity', JSON.stringify(showQuantity));
     return showQuantity;
   }
 
