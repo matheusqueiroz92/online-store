@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getProductById } from '../services/api';
 import { addEvaluation, getEvaluations } from '../services/LoadEvaluations';
 import Button from '../Components/Button';
 
@@ -22,17 +21,18 @@ class Product extends React.Component {
     this.loadLocalStorage();
   }
 
-  callProduct = async () => {
+  callProduct = () => {
     const { match: {
       params: {
         id,
       },
-    } } = this.props;
+    }, showProducts, getInfoFromHome } = this.props;
 
-    const productCalled = await getProductById(id);
-
+    if (showProducts.length < 1) return;
+    const targetID = showProducts.find((el) => el.id === id);
+    getInfoFromHome(showProducts);
     this.setState({
-      productView: productCalled,
+      productView: targetID,
     });
   }
 
@@ -69,7 +69,7 @@ class Product extends React.Component {
 
   render() {
     const { productView, inputEmail, inputEvaluation, allEvaluations } = this.state;
-    const { addToCart } = this.props;
+    const { addToCart, quantity } = this.props;
 
     const maxIndex = 5;
     return (
@@ -88,7 +88,9 @@ class Product extends React.Component {
         >
           Adicionar ao Carrinho
         </button>
-        <Button />
+        <Button
+          quantity={ quantity }
+        />
         <form>
           <input
             type="text"
@@ -145,6 +147,7 @@ class Product extends React.Component {
 
 Product.propTypes = {
   addToCart: PropTypes.func,
+  quantity: PropTypes.any,
 }.isRequired;
 
 export default Product;

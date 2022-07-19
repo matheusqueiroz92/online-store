@@ -57,7 +57,7 @@ class Home extends React.Component {
   render() {
     const { searchText, products, categoriesProducts,
       searchBtnClick } = this.state;
-    const { addToCart } = this.props;
+    const { addToCart, quantity } = this.props;
 
     return (
       <div>
@@ -80,7 +80,9 @@ class Home extends React.Component {
               </button>
             </form>
           </div>
-          <Button />
+          <Button
+            quantity={ quantity }
+          />
         </header>
         <CategoryAside
           handleClickCategoryBtn={ this.handleClickCategoryBtn }
@@ -124,8 +126,9 @@ class Home extends React.Component {
 }
 
 Home.propTypes = {
-  addToCart: PropTypes.func.isRequired,
-  getInfoFromHome: PropTypes.func.isRequired,
-};
+  addToCart: PropTypes.func,
+  getInfoFromHome: PropTypes.func,
+  quantity: PropTypes.any,
+}.isRequired;
 
 export default Home;

@@ -61,6 +61,7 @@ class App extends React.Component {
           render={ () => (<Home
             addToCart={ this.addToCart }
             getInfoFromHome={ this.getInfoFromHome }
+            quantity={ Object.entries(cartItems).map((el) => el[1]) }
           />) }
         />
         <Route
@@ -80,7 +81,14 @@ class App extends React.Component {
         />
         <Route
           path="/product/:id"
-          render={ (props) => <Product { ...props } addToCart={ this.addToCart } /> }
+          render={ (props) => (
+            <Product
+              { ...props }
+              addToCart={ this.addToCart }
+              showProducts={ this.showProducts }
+              getInfoFromHome={ this.getInfoFromHome }
+              quantity={ Object.entries(cartItems).map((el) => el[1]) }
+            />) }
         />
         <Route path="/checkout" render={ (props) => <Checkout { ...props } /> } />
       </BrowserRouter>
