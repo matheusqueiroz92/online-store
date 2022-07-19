@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, BrowserRouter } from 'react-router-dom';
 import './App.css';
 import Cart from './Pages/Cart';
+import Checkout from './Pages/Checkout';
 import Home from './Pages/Home';
 import Product from './Pages/Product';
 
@@ -81,6 +82,7 @@ class App extends React.Component {
           path="/product/:id"
           render={ (props) => <Product { ...props } addToCart={ this.addToCart } /> }
         />
+        <Route path="/checkout" render={ (props) => <Checkout { ...props } /> } />
       </BrowserRouter>
     );
   }
